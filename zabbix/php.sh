@@ -27,7 +27,7 @@ if [ $1 -ne 9 ];then
     ym
 fi
 #安装依赖包
-yum -y install libxml2 libxml2-devel openssl openssl-de vel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel mhash mhash-devel
+yum -y install libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel mhash mhash-devel
 #解压并编译安装php
 [ ! -d php-7.2.8 ] && tar -xf ./Package/php-7.2.8.tar.xz
 cd ./php-7.2.8/
@@ -57,4 +57,3 @@ service php-fpm restart
 ss -tnl | grep ':9000' &>/dev/null
 [ $? != 0 ] && exit 1
 echo "php7成功启动"
-
