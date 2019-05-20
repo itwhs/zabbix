@@ -29,14 +29,14 @@ fi
 #安装依赖包
 yum -y install libxml2 libxml2-devel openssl openssl-devel bzip2 bzip2-devel libcurl libcurl-devel libjpeg libjpeg-devel libpng libpng-devel freetype freetype-devel gmp gmp-devel libmcrypt libmcrypt-devel readline readline-devel libxslt libxslt-devel mhash mhash-devel
 #解压并编译安装php
-[ ! -d php-7.2.8 ] && tar -xf ./Package/php-7.2.8.tar.xz
-cd ./php-7.2.8/
+[ -d php-7.2.8 ] || tar -xf Package/php-7.2.8.tar.xz
+cd php-7.2.8/
 ./configure --prefix=$phpdir  --with-curl  --with-freetype-dir  --with-gd  --with-gettext  --with-iconv-dir  --with-kerberos  --with-libdir=lib64  --with-libxml-dir=/usr  --with-mysqli=$phpmysql  --with-openssl  --with-pcre-regex  --with-pdo-mysql  --with-pdo-sqlite  --with-pear  --with-jpeg-dir  --with-png-dir  --with-xmlrpc  --with-xsl  --with-zlib  --with-config-file-path=/etc  --with-config-file-scan-dir=/etc/php.d  --with-bz2  --enable-fpm  --enable-bcmath  --enable-libxml  --enable-inline-optimization  --enable-mbregex  --enable-mbstring  --enable-opcache  --enable-pcntl  --enable-shmop  --enable-soap  --enable-sockets  --enable-sysvsem --enable-xml  --enable-zip
 make -j$cores 2>$log && make install
 [ $? != 0 ] && exit 1
 #将路径写入环境变量中
 echo "export PATH=$phpdir/bin:\$PATH" >/etc/profile.d/php7.sh
-source /etc/profile.d/php7.sh
+echo "请执行: source /etc/profile.d/php7.sh 来添加环境变量"
 #配置php-fpm
 \cp php.ini-production /etc/php.ini
 \cp sapi/fpm/init.d.php-fpm /etc/init.d/php-fpm
@@ -57,3 +57,4 @@ service php-fpm restart
 ss -tnl | grep ':9000' &>/dev/null
 [ $? != 0 ] && exit 1
 echo "php7成功启动"
+

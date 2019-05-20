@@ -1,10 +1,11 @@
 #!/bin/bash
 zbmysqlName=zabbix
 zbmysqlUser=zabbix
-zbmysqlPass=zabix123!
+zbmysqlPass=zabbix123!
 zbserverconf=/usr/local/etc/zabbix_server.conf
 apachedir=/usr/local/apache
 mysqlpass=itwhsgithubio
+mysqlDir=/usr/local/mysql/
 log=/root/zabbix.log
 function ym(){
 #配置网络源
@@ -48,12 +49,12 @@ SELECT user,host FROM user;
 FLUSH PRIVILEGES;"
 
 #编译安装zabbix
-[ ! -f Package/zabbix-4.2.1 ] && tar xf ./Package/zabbix-4.2.1.tar.gz -C /usr/src/
+[ -d /usr/src/zabbix-4.2.1 ] || tar xf Package/zabbix-4.2.1.tar.gz -C /usr/src/
 for i in schema.sql images.sql data.sql;do
    /usr/local/mysql/bin/mysql -u$zbmysqlUser -p$zbmysqlPass $zbmysqlName < /usr/src/zabbix-4.2.1/database/mysql/$i
 done
 cd /usr/src/zabbix-4.2.1
-./configure --enable-server --enable-agent --with-mysql --with-net-snmp --with-libcurl --with-libxml2
+./configure --enable-server --enable-agent --with-mysql=$(find ${mysqlDir} -name "mysql_config") --with-net-snmp --with-libcurl --with-libxml2
 make install 2>$log
 
 #zabbix服务端配置

@@ -40,7 +40,8 @@ check
 sed -i '/proxy_module/s/#//g' $apacheconfdir/httpd.conf
 sed -i '/proxy_fcgi_module/s/#//g' $apacheconfdir/httpd.conf
 #创建虚拟主机目录并生成php测试页面
-[ ! -d $apachedir/htdocs/wenhs ] && mkdir $apachedir/htdocs/wenhs ;cat > $apachedir/htdocs/wenhs/index.php << EOF
+[ ! -d $apachedir/htdocs/wenhs ] && mkdir $apachedir/htdocs/wenhs
+cat > $apachedir/htdocs/wenhs/index.php << EOF
 <?php
    phpinfo();
 ?>
@@ -52,7 +53,8 @@ if [ $? -ne 0 ];then
 fi
 chown -R apache.apache $apachedir/htdocs/ 2>$log
 #配置apache访问页面
-[ ! -f $apacheconfdir/httpd.conf.back ] && cp $apacheconfdir/httpd.conf{,.back} ;\cp $apacheconfdir/httpd.conf{.back,}
+[ ! -f $apacheconfdir/httpd.conf.back ] && cp $apacheconfdir/httpd.conf{,.back}
+\cp $apacheconfdir/httpd.conf{.back,}
 cat >>$apacheconfdir/httpd.conf <<ZXC
 #修改配置文件，添加以下内容
 ServerName www.wenhs.com:80

@@ -33,15 +33,16 @@ groupadd -r mysql
 useradd -r -M -s /sbin/nologin -g mysql mysql
 fi
 #解压二进制包，并创建连接修改属主和属组
-[ ! -d /usr/local/mysql-5.7.22-linux-glibc2.12-x86_64 ] && tar -xf ./Package/mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz -C /usr/local/
+[ -d /usr/local/mysql-5.7.25-linux-glibc2.12-x86_64 ] || tar -xf ./Package/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz -C /usr/local/
 cd /usr/local/
-chown -R mysql.mysql mysql-5.7.22-linux-glibc2.12-x86_64
-ln -sv mysql-5.7.22-linux-glibc2.12-x86_64/ mysql
+chown -R mysql.mysql mysql-5.7.25-linux-glibc2.12-x86_64
+ln -sv mysql-5.7.25-linux-glibc2.12-x86_64/ mysql
 #添加环境变量
 echo 'export PATH=/usr/local/mysql/bin:$PATH' > /etc/profile.d/mysql.sh
-source /etc/profile.d/mysql.sh
+echo "请执行: source /etc/profile.d/mysql.sh 来添加环境变量"
 #创建存放数据的目录并修改属主
-[ ! -d /opt/data ] && mkdir /opt/data ;chown mysql.mysql /opt/data
+[ -d /opt/data ] || mkdir /opt/data
+chown mysql.mysql /opt/data
 #初始化数据库(密码在root目录下)
 /usr/local/mysql/bin/mysqld --initialize --user=mysql --datadir=/opt/data/ &> /root/password
 #安装后配置
