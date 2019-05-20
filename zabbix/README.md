@@ -24,6 +24,7 @@ zabbix
 本脚本用来安装httpd-2.2.9或者httpd-2.4.39,mysql-5.7.25,php-7.2.8简称lamp,随后部署zabbix监控服务
 
 MySQL二进制包太大,请自行官网下载,放入Package目录,注意版本和名称要一样
+wget https://downloads.mysql.com/archives/get/file/mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
 
 主要测试环境为centos7或Redhat7,如其他环境,请自行修改
 
