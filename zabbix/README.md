@@ -10,7 +10,7 @@ zabbix
 │   ├── apr-util-1.6.1.tar.gz
 │   ├── httpd-2.2.9.tar.gz
 │   ├── httpd-2.4.39.tar.gz
-│   ├── mysql-5.7.22-linux-glibc2.12-x86_64.tar.gz
+│   ├── mysql-5.7.25-linux-glibc2.12-x86_64.tar.gz
 │   ├── php-7.2.8.tar.xz
 │   └── zabbix-4.2.1.tar.gz
 ├── php.sh
@@ -21,7 +21,7 @@ zabbix
 
 ### 注意事项:
 
-本脚本用来安装httpd-2.2.9或者httpd-2.4.39,mysql-5.7.22,php-7.2.8简称lamp,随后部署zabbix监控服务
+本脚本用来安装httpd-2.2.9或者httpd-2.4.39,mysql-5.7.25,php-7.2.8简称lamp,随后部署zabbix监控服务
 
 MySQL二进制包太大,请自行官网下载,放入Package目录,注意版本和名称要一样
 
