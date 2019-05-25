@@ -38,7 +38,8 @@ zabbix默认数据库是zabbix,库是zabbix,密码zabbix123!
 web登录账号Admin密码zabbix
 
 zabbix.sh自带有4个告警媒介脚本,如需使用,请先更改脚本变量,至于使用方法,可参考:
-https://blog.csdn.net/wenhs5479
+
+https://blog.csdn.net/wenhs5479/article/details/90514159
 
 使用此脚本请进入本脚本的目录下,否则无法成功
 
