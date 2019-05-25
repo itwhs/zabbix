@@ -97,4 +97,3 @@ echo "请执行 : source /etc/profile.d/httpd.sh 来添加环境变量"
 echo  "安装完成"
 #清理
 #安装完成后,可以删除这个httpd.tar,已经不需要了
-
