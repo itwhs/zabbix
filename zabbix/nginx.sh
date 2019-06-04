@@ -39,10 +39,50 @@ chown -R nginx.nginx $logdir
 [ ! -f Package/nginx-1.16.0.tar.gz ] && wget http://nginx.org/download/nginx-1.16.0.tar.gz
 [ ! -d /nginx-1.16.0 ] && tar xf nginx-1.16.0.tar.gz -C /usr/src/
 cd /usr/src/nginx-1.16.0
-./configure --prefix=$nginxdir --user=nginx --group=nginx --with-debug --with-http_ssl_module --with-http_realip_module --with-http_image_filter_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_stub_status_module --http-log-path=$logdir/access.log --error-log-path=$logdir/error.log
+./configure --prefix=$nginxdir --user=nginx --group=nginx --with-debug --with-http_ssl_module --with-http_realip_module --with-http_image_filter_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_stub_status_module --http-log-path=$logdir/access.log --error-log-path=$logdir/error.log --with-pcre
 make -j$cores 2>$log && make install
+
+
+#添加服务控制脚本
+cat >>/etc/init.d/nginx <<'EOF'
+#!/bin/bash
+nginx="/usr/local/nginx/sbin/nginx"
+NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
+count=$(ps -ef |grep -Ev "grep|$0" |grep  -Ec nginx)
+status(){
+    if [ $count -ne 0 ];then
+		echo "nginx is running"
+    else
+		echo "nginx is stoped"
+	fi
+}
+case $1 in
+	start)
+		$nginx -c $NGINX_CONF_FILE
+		;;
+	stop)
+		$nginx -s stop
+		;;
+	restart)
+		$nginx -s stop
+		sleep 1
+		$nginx -c $NGINX_CONF_FILE
+		;;
+	reload)
+		$nginx -s reload
+		;;
+	status)
+		$1
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|reload}"
+		exit 2
+esac
+EOF
+chmod +x /etc/init.d/nginx
 
 ##添加环境变量
 echo "export PATH=$nginxdir/sbin:\$PATH" >/etc/profile.d/nginx.sh
 echo "请执行 : source /etc/profile.d/nginx.sh 来添加环境变量"
 echo  "安装完成"
+echo "启动服务方法:service nginx start|stop|status|restart|reload "
