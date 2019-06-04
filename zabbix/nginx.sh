@@ -48,14 +48,7 @@ cat >>/etc/init.d/nginx <<'EOF'
 #!/bin/bash
 nginx="/usr/local/nginx/sbin/nginx"
 NGINX_CONF_FILE="/usr/local/nginx/conf/nginx.conf"
-count=$(ps -ef |grep -Ev "grep|$0" |grep  -Ec nginx)
-status(){
-    if [ $count -ne 0 ];then
-		echo "nginx is running"
-    else
-		echo "nginx is stoped"
-	fi
-}
+pid="/usr/local/nginx/logs/nginx.pid"
 case $1 in
 	start)
 		$nginx -c $NGINX_CONF_FILE
@@ -72,11 +65,16 @@ case $1 in
 		$nginx -s reload
 		;;
 	status)
-		$1
+		if [ -f $pid ];then
+		    echo "nginx is running"
+        else
+		    echo "nginx is stoped"
+	    fi
 		;;
 	*)
 		echo $"Usage: $0 {start|stop|status|restart|reload}"
 		exit 2
+		;;
 esac
 EOF
 chmod +x /etc/init.d/nginx
