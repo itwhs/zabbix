@@ -49,7 +49,9 @@ https://blog.csdn.net/wenhs5479/article/details/90514159
 使用此脚本请进入本脚本的目录下,否则无法成功
 
 使用教程:
-    bash lampzbx.sh
+    bash install.sh
+    
+可选择安装lamp或者lnmp架构的zabbix
 
 安装时会在root目录下,生成一些log或者其他配置文件,这些都是无关紧要的,可以删除
 
