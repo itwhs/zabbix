@@ -19,7 +19,7 @@ bash yum.sh 2>$log
 check
 }
 function zbx(){
-bash zabbix.sh 6 2>$log
+bash zabbix.sh 4 2>$log
 check
 }
 function apa(){

@@ -24,7 +24,7 @@ bash nginx.sh 5 2>$log
 check
 }
 function zbx(){
-bash zabbix.sh 6 2>$log
+bash zabbix.sh 3 2>$log
 check
 }
 function sql(){

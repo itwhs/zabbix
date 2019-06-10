@@ -139,10 +139,10 @@ WHS
 #设置zabbix/conf目录的权限，让zabbix有权限生成配置文件zabbix.conf.php
 chmod 777 $document_root/zabbix/conf
 }
-if [ $1 -eq 5 ];then
+if [ $1 -eq 3 ];then
     ngx
 else
-    if [ $1 -eq 7 ];then
+    if [ $1 -eq 4 ];then
         apq
 	else
 	    echo "执行失败,没有成功调用函数"
@@ -309,10 +309,10 @@ $apachedir/bin/apachectl start 2>$log
 function ngxon(){
 /etc/init.d/nginx restart
 }
-if [ $1 -eq 5 ];then
+if [ $1 -eq 3 ];then
     ngxon
 else
-    if [ $1 -eq 7 ];then
+    if [ $1 -eq 4 ];then
         apqon
         else
             echo "执行失败,没有成功调用函数"
