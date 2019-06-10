@@ -74,3 +74,4 @@ echo "mysql启动成功,正在修改密码"
 passwd0=$(tail -1 /root/password |awk '{print $NF}')
 echo "默认设置的新密码为$mysqlpass" 
 /usr/local/mysql/bin/mysqladmin -uroot -p"$passwd0" password "$mysqlpass"
+

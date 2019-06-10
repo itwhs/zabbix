@@ -36,8 +36,13 @@ fi
 
 mkdir -p $logdir
 chown -R nginx.nginx $logdir
-[ ! -f Package/nginx-1.16.0.tar.gz ] && wget http://nginx.org/download/nginx-1.16.0.tar.gz
-[ ! -d /nginx-1.16.0 ] && tar xf nginx-1.16.0.tar.gz -C /usr/src/
+if [ ! -f Package/nginx-1.16.0.tar.gz ];then
+    wget -O Package/nginx-1.16.0.tar.gz http://nginx.org/download/nginx-1.16.0.tar.gz
+else
+    if [ ! -d /usr/src/nginx-1.16.0 ];then
+        tar xf Package/nginx-1.16.0.tar.gz -C /usr/src/
+    fi
+fi
 cd /usr/src/nginx-1.16.0
 ./configure --prefix=$nginxdir --user=nginx --group=nginx --with-debug --with-http_ssl_module --with-http_realip_module --with-http_image_filter_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_stub_status_module --http-log-path=$logdir/access.log --error-log-path=$logdir/error.log --with-pcre
 make -j$cores 2>$log && make install
@@ -84,3 +89,4 @@ echo "export PATH=$nginxdir/sbin:\$PATH" >/etc/profile.d/nginx.sh
 echo "请执行 : source /etc/profile.d/nginx.sh 来添加环境变量"
 echo  "安装完成"
 echo "启动服务方法:service nginx start|stop|status|restart|reload "
+

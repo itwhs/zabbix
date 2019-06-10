@@ -80,3 +80,4 @@ $apachedir/bin/apachectl start
 echo "lamp安装完成"
 zbx
 echo "zabbix安装完成"
+

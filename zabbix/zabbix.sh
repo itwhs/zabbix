@@ -13,6 +13,9 @@ secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx    # Secret是管理组凭证密钥
 agentid=xxxxxxxxx   # 应用ID
 partyid=2        # 部门ID	
 apachedir="/usr/local/apache"
+document_root="/usr/local/nginx/html"
+nginxconf="/usr/local/nginx/conf/nginx.conf"
+nginxvhost="/usr/local/nginx/conf/vhost.type"
 mysqlpass=itwhsgithubio
 mysqlDir="/usr/local/mysql/"
 log=/root/zabbix.log
@@ -80,6 +83,7 @@ sed -ri 's/(max_execution_time =).*/\1 300/g' /etc/php.ini
 sed -ri 's/(max_input_time =).*/\1 300/g' /etc/php.ini
 sed -i '/;date.timezone/a date.timezone = Asia/Shanghai' /etc/php.ini
 service php-fpm restart
+function apq(){
 [ ! -d $apachedir/htdocs/zabbix ] && mkdir $apachedir/htdocs/zabbix
 \cp -a /usr/src/zabbix-4.2.1/frontends/php/* $apachedir/htdocs/zabbix/
 id apache
@@ -88,7 +92,6 @@ if [ $? -ne 0 ];then
     useradd -r -g apache -M -s /sbin/nologin apache
 fi
 chown -R apache.apache $apachedir/htdocs
-
 #配置apache虚拟主机
 cat >>/etc/httpd/httpd.conf <<WHS
 #在配置文件的末尾加如下内容
@@ -107,6 +110,44 @@ ServerName zabbix.wenhs.com:80
 WHS
 #设置zabbix/conf目录的权限，让zabbix有权限生成配置文件zabbix.conf.php
 chmod 777 $apachedir/htdocs/zabbix/conf
+}
+function ngx(){
+[ ! -d $document_root/zabbix ] && mkdir $document_root/zabbix
+\cp -a /usr/src/zabbix-4.2.1/frontends/php/* $document_root/zabbix/
+id nginx
+if [ $? -ne 0 ];then
+    groupadd -r nginx
+    useradd -r -g nginx -M -s /sbin/nologin nginx
+fi
+chown -R nginx.nginx $document_root
+#配置nginx虚拟主机
+sed -ri /^http/a"\ \ \ \ include\ \ \ \ \ \ \ vhost.type;" $nginxconf
+cat >> $nginxvhost <<'WHS'
+    server {
+        listen       80;
+        server_name  zabbix.wenhs.com;
+        access_log  logs/zabbix.log;
+        location ~ \.php$ {
+            root           html/zabbix;
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+    }
+WHS
+#设置zabbix/conf目录的权限，让zabbix有权限生成配置文件zabbix.conf.php
+chmod 777 $document_root/zabbix/conf
+}
+if [ $1 -eq 5 ];then
+    ngx
+else
+    if [ $1 -eq 7 ];then
+        apq
+	else
+	    echo "执行失败,没有成功调用函数"
+    fi
+fi
 [ -d $zbserverconf/scripts ] || mkdir $zbserverconf/scripts
 sed -ri /^AlertScriptsPath=/d $zbserverconf/zabbix_server.conf
 sed -ri "s#.*(AlertScriptsPath=).{0,}#&\n\1$zbserverconf/scripts#" $zbserverconf/zabbix_server.conf
@@ -261,8 +302,23 @@ chmod +x $zbserverconf/scripts/*
 zabbix_server
 zabbix_agentd
 #重启服务,去web端安装
+function apqon(){
 $apachedir/bin/apachectl stop 2>$log
 $apachedir/bin/apachectl start 2>$log
+}
+function ngxon(){
+/etc/init.d/nginx restart
+}
+if [ $1 -eq 5 ];then
+    ngxon
+else
+    if [ $1 -eq 7 ];then
+        apqon
+        else
+            echo "执行失败,没有成功调用函数"
+    fi
+fi
+
 echo "请访问web:http://zabbix.wenhs.com完成安装"
 echo "安装完成,自行恢复zabbix/conf目录的权限为755"
 echo "chmod 755 /usr/local/apache/htdocs/zabbix/conf"
@@ -293,3 +349,4 @@ if (whiptail --title "install server or client" --yes-button "Server" --no-butto
 else
     khd
 fi
+
