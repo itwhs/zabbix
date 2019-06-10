@@ -56,7 +56,7 @@ sed -ri /^http/a"\ \ \ \ include\ \ \ \ \ \ \ vhost.types;" $nginxconf
 cat >> $nginxvhost <<'ZXC'
     server {
         listen       80;
-        access_log  logs/host.access.log;
+		index index.php index.html;
         location ~ \.php$ {
             root           html/wenhs;
             fastcgi_pass   127.0.0.1:9000;
@@ -71,4 +71,3 @@ ZXC
 echo "lnmp安装完成"
 zbx
 echo "zabbix安装完成"
-

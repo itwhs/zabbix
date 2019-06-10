@@ -125,6 +125,7 @@ sed -ri /^http/a"\ \ \ \ include\ \ \ \ \ \ \ vhost.type;" $nginxconf
 cat >> $nginxvhost <<'WHS'
     server {
         listen       80;
+		index index.php index.html;
         server_name  zabbix.wenhs.com;
         access_log  logs/zabbix.log;
         location ~ \.php$ {
@@ -349,4 +350,3 @@ if (whiptail --title "install server or client" --yes-button "Server" --no-butto
 else
     khd
 fi
-
