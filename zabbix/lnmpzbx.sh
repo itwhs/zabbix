@@ -56,7 +56,7 @@ sed -ri /^http/a"\ \ \ \ include\ \ \ \ \ \ \ vhost.types;" $nginxconf
 cat >> $nginxvhost <<'ZXC'
     server {
         listen       80;
-		index index.php index.html;
+	index index.php index.html;
         location ~ \.php$ {
             root           html/wenhs;
             fastcgi_pass   127.0.0.1:9000;
